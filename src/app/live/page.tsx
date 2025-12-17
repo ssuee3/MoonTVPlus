@@ -383,9 +383,9 @@ function LivePageClient() {
           setVideoUrl(channels[0].url);
         }
 
-        // 获取初始频道的节目单
+        // 异步获取初始频道的节目单（不阻塞页面加载）
         if (selectedChannel) {
-          await fetchEpgData(selectedChannel, source);
+          fetchEpgData(selectedChannel, source);
         }
       }
 
