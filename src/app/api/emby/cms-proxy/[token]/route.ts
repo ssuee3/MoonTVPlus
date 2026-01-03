@@ -206,8 +206,9 @@ async function handleDetail(
   let vodPlayUrl = '';
 
   if (item.Type === 'Movie') {
-    // 电影：单个播放链接
-    vodPlayUrl = `正片$${client.getStreamUrl(item.Id)}`;
+    // 电影：单个播放链接（使用代理，添加 .mp4 扩展名）
+    const proxyUrl = `${baseUrl}/api/emby/play/${encodeURIComponent(token)}/video.mp4?itemId=${item.Id}`;
+    vodPlayUrl = `正片$${proxyUrl}`;
   } else if (item.Type === 'Series') {
     // 剧集：获取所有集
     const allEpisodes = await client.getEpisodes(itemId);
@@ -221,8 +222,8 @@ async function handleDetail(
       })
       .map((ep) => {
         const title = `第${ep.IndexNumber}集`;
-        const playUrl = client.getStreamUrl(ep.Id);
-        return `${title}$${playUrl}`;
+        const proxyUrl = `${baseUrl}/api/emby/play/${encodeURIComponent(token)}/video.mp4?itemId=${ep.Id}`;
+        return `${title}$${proxyUrl}`;
       });
 
     vodPlayUrl = episodes.join('#');
